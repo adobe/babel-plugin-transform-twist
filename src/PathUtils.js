@@ -13,6 +13,7 @@
 
 const t = require('babel-types');
 const template = require('babel-template');
+const { addNamed } = require('babel-helper-module-imports');
 
 module.exports = class PathUtils {
 
@@ -77,6 +78,17 @@ module.exports = class PathUtils {
             parent.unshiftContainer('body', template(fn.toString().replace(/.*?\(/, 'function ' + fnName.name + '('))());
         }
         return fnName;
+    }
+
+    static addImportOnce(path, exportName, moduleName) {
+        const parent = path.scope.getProgramParent().path;
+        const importKey = exportName + '@' + moduleName;
+        let localName = parent.scope.getData(importKey);
+        if (!localName) {
+            localName = addNamed(path, exportName, moduleName);
+            parent.scope.setData(importKey, localName);
+        }
+        return localName;
     }
 
     /**

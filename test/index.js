@@ -25,8 +25,8 @@ describe('babel-plugin-transform-twist', () => {
     const transformer = new Transformer({
         autoImport: {
             'autoimported:component': {
-                module: 'some-module',
-                export: 'someExport'
+                module: 'my-library',
+                export: 'MyComponent'
             },
             'Decorator' : {
                 module: 'decorator-module',

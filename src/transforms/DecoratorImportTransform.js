@@ -11,8 +11,8 @@
  *
  */
 
+const PathUtils = require('../PathUtils');
 const t = require('babel-types');
-const { addNamed } = require('babel-helper-module-imports');
 
 module.exports = class DecoratorImporter {
 
@@ -96,12 +96,12 @@ module.exports = class DecoratorImporter {
         }
         this.assertDefinitionFormat(def, identifier.name);
 
-        identifier.name = addNamed(path, def.export, def.module).name;
+        identifier.name = PathUtils.addImportOnce(path, def.export, def.module).name;
 
         const className = t.isClass(path.node) && path.node.id.name;
 
         if (def.inherits && !path.node.superClass) {
-            path.node.superClass = addNamed(path, def.inherits.export, def.inherits.module);
+            path.node.superClass = PathUtils.addImportOnce(path, def.inherits.export, def.inherits.module);
         }
 
         if (def.needsClassName) {
@@ -111,7 +111,7 @@ module.exports = class DecoratorImporter {
             decorator.expression.arguments.unshift(t.stringLiteral(className));
         }
         if (def.hotReload && className) {
-            decorator.expression = t.callExpression(addNamed(path, 'default', def.hotReload),
+            decorator.expression = t.callExpression(PathUtils.addImportOnce(path, 'default', def.hotReload),
                 [ decorator.expression, t.identifier('module'), t.stringLiteral(className) ]);
         }
         if (def.interceptsSuper) {

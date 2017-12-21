@@ -13,7 +13,6 @@
 
 const PathUtils = require('../PathUtils');
 const t = require('babel-types');
-const { addNamed } = require('babel-helper-module-imports');
 
 const IGNORED_COMPONENTS = new Set([ 'repeat', 'g', 'if', 'elseif', 'else', 'using', 'unless', 'svg', 'iframe', 'object', 'embed' ]);
 
@@ -46,7 +45,7 @@ module.exports = class ComponentImportTransform {
         if (!def) {
             return;
         }
-        const localName = addNamed(path, def.export, def.module, { nameHint: elementName }).name;
+        const localName = PathUtils.addImportOnce(path, def.export, def.module).name;
         path.node.openingElement.name = t.jSXIdentifier(localName);
         if (path.node.closingElement) {
             path.node.closingElement.name = t.jSXIdentifier(localName);
