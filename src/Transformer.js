@@ -18,6 +18,9 @@ const recast = require('recast');
 const { transform } = require('babel-core');
 
 module.exports = class Transformer {
+
+    _indexFile = path.join(__dirname, 'index.js')
+
     constructor(transformOptions) {
         this.recastOptions = {
             quote: 'single',
@@ -58,7 +61,7 @@ module.exports = class Transformer {
             require('babel-plugin-syntax-function-sent'),
             require('babel-plugin-syntax-jsx'),
             require('babel-plugin-syntax-object-rest-spread'),
-            [ path.join(__dirname, 'index.js'), transformOptions ]
+            [ this._indexFile, transformOptions ]
         ];
     }
 
