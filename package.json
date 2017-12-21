@@ -1,5 +1,5 @@
 {
-  "name": "@twist/babel-plugin-transform-react",
+  "name": "@twist/babel-plugin-transform",
   "version": "0.1.0",
   "author": "Adobe Systems Inc.",
   "license": "Apache-2.0",
