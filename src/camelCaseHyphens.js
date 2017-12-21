@@ -1,0 +1,33 @@
+/*
+ *  Copyright 2017 Adobe Systems Incorporated. All rights reserved.
+ *  This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License. You may obtain a copy
+ *  of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software distributed under
+ *  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ *  OF ANY KIND, either express or implied. See the License for the specific language
+ *  governing permissions and limitations under the License.
+ *
+ */
+
+const upperCaseReplacementFn = (match, x) => x.toUpperCase();
+
+/**
+ * Convert a potentially-hyphenated string into camelCase,
+ * as used conventionally when writing JSX attributes. This does _not_
+ * convert other word separators, such as underscores or spaces.
+ *
+ * Example:
+ *
+ *     camelCaseHyphens("some-attribute") === "someAttribute"
+ *     camelCaseHyphens("-webkit-animation") === "WebkitAnimation"
+ *     camelCaseHyphens("under_score") === "under_score"
+ *
+ * @param str
+ */
+function camelCaseHyphens(str) {
+    return str.replace(/-+([^-]?)/g, upperCaseReplacementFn);
+}
+
+module.exports = camelCaseHyphens;
