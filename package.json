@@ -1,0 +1,42 @@
+{
+  "name": "@twist/babel-plugin-transform-react",
+  "version": "0.1.0",
+  "author": "Adobe Systems Inc.",
+  "license": "Apache-2.0",
+  "description": "Transformations for Twist enhancements to React",
+  "main": "src/index.js",
+  "scripts": {
+    "linter": "eslint --ext .js,.jsx .",
+    "updateKnownGoods": "UPDATE_KNOWN_GOODS=1 npm test",
+    "test-fixtures": "mocha test/**/*.js",
+    "test": "npm run test-fixtures"
+  },
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-helper-module-imports": "^7.0.0-beta.3",
+    "babel-plugin-syntax-async-generators": "^6.13.0",
+    "babel-plugin-syntax-class-properties": "^6.13.0",
+    "babel-plugin-syntax-decorators": "^6.13.0",
+    "babel-plugin-syntax-do-expressions": "^6.13.0",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-plugin-syntax-export-extensions": "^6.13.0",
+    "babel-plugin-syntax-flow": "^6.18.0",
+    "babel-plugin-syntax-function-bind": "^6.13.0",
+    "babel-plugin-syntax-function-sent": "^6.13.0",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-syntax-object-rest-spread": "^6.13.0",
+    "babel-template": "^6.26.0",
+    "babel-types": "^6.26.0",
+    "recast": "^0.12.9"
+  },
+  "devDependencies": {
+    "babel-eslint": "7.2.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "4.3.0",
+    "eslint-plugin-babel": "4.1.2",
+    "mocha": "^4.0.1",
+    "react": "^16.0.0",
+    "react-test-renderer": "^16.0.0"
+  }
+}
