@@ -19,7 +19,9 @@ const { transform } = require('babel-core');
 
 module.exports = class Transformer {
 
-    _indexFile = path.join(__dirname, 'index.js')
+    get _indexFile() {
+        return path.join(__dirname, 'index.js');
+    }
 
     constructor(transformOptions) {
         this.recastOptions = {
