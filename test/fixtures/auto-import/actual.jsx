@@ -11,11 +11,3 @@ class Foo {
         </div>
     }
 }
-
-@Store
-class MyStore {
-}
-
-@Store
-class MySubStore extends MyStore {
-}
