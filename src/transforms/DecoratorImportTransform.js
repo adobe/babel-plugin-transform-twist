@@ -64,8 +64,8 @@ module.exports = class DecoratorImporter {
         path.traverse({
             'ClassExpression|ClassDeclaration|ClassProperty|Method': (path) => {
                 if (path.node.decorators) {
-                    path.node.decorators.forEach((decorator) => {
-                        this.visitDecorator(decorator, path);
+                    path.node.decorators.forEach((decorator, index) => {
+                        this.visitDecorator(path.get('decorators.' + index), path);
                     });
                 }
             },
@@ -87,8 +87,16 @@ module.exports = class DecoratorImporter {
     }
 
     /** Given this decorator, automatically import the necessary module(s). */
-    visitDecorator(decorator, path) {
+    visitDecorator(decoratorPath, path) {
+        const decorator = decoratorPath.node;
         const identifier = DecoratorImporter.getLeftmostIdentifier(decorator.expression);
+
+        // First, check that the decorator isn't already imported
+        if (decoratorPath.scope.hasBinding(identifier.name)) {
+            return;
+        }
+
+        // Look up the decorator to see if it should be imported automatically
         const def = this.definitions[identifier.name];
         if (!def) {
             // A decorator with no definition. This is fine; they might have imported a decorator manually.
@@ -96,6 +104,8 @@ module.exports = class DecoratorImporter {
         }
         this.assertDefinitionFormat(def, identifier.name);
 
+        // Change the name to the import, but also remember the original name - because some of the other transforms may need to know this!
+        decoratorPath.setData('originalName', identifier.name);
         identifier.name = PathUtils.addImportOnce(path, def.export, def.module).name;
 
         const className = t.isClass(path.node) && path.node.id.name;
