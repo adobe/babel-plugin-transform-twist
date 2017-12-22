@@ -188,22 +188,32 @@ module.exports = class PathUtils {
     }
 
     /**
-     * Return the class declaration of a path's parent component, if the path is inside one.
+     * Return the class declaration of a path's parent class, if it has a decorator with the given name.
+     * This is often used to find a class with a specific decorator like @Component.
      * @param {Path} path
+     * @param {string} decoratorName
      * @return {Node<ClassDeclaration> | undefined}
      */
-    static findParentComponent(path) {
+    static findParentClassWithDecorator(path, decoratorName) {
         const classDeclarationPath = path.findParent(parent => t.isClassDeclaration(parent));
 
         // See if there's an @Component decorator:
         const decorators = classDeclarationPath && classDeclarationPath.node.decorators;
-        const componentDecorator = decorators && decorators.find(d => {
+        const componentDecorator = decorators && decorators.find((d, index) => {
+            // First, see if there's an originalName for the decorator - a different transform could have renamed it.
+            let decoratorPath = classDeclarationPath.get('decorators.' + index);
+            let originalName = decoratorPath.getData('originalName');
+            if (originalName) {
+                return originalName === decoratorName;
+            }
+
+            // If the name didn't change, we check the actual name of the decorator
             let expr = d.expression;
             if (t.isCallExpression(expr)) {
                 // It could be a call expression, like @Component({ fork: true })
                 expr = expr.callee;
             }
-            return expr && expr.name === 'Component';
+            return expr && expr.name === decoratorName;
         });
         if (componentDecorator) {
             return classDeclarationPath;
