@@ -69,23 +69,12 @@ module.exports = class PathUtils {
         return attr && attr.value;
     }
 
-    static addGlobalOnce(path, readableName, fn) {
-        const parent = path.scope.getProgramParent().path;
-        let fnName = parent.scope.getData(readableName);
-        if (!fnName) {
-            fnName = path.scope.generateUidIdentifier(readableName);
-            parent.scope.setData(readableName, fnName);
-            parent.unshiftContainer('body', template(fn.toString().replace(/.*?\(/, 'function ' + fnName.name + '('))());
-        }
-        return fnName;
-    }
-
-    static addImportOnce(path, exportName, moduleName) {
+    static addImportOnce(path, exportName, moduleName, options) {
         const parent = path.scope.getProgramParent().path;
         const importKey = exportName + '@' + moduleName;
         let localName = parent.scope.getData(importKey);
         if (!localName) {
-            localName = addNamed(path, exportName, moduleName);
+            localName = addNamed(path, exportName, moduleName, options);
             parent.scope.setData(importKey, localName);
         }
         return localName;
