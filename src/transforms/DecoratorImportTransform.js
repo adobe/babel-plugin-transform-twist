@@ -58,18 +58,13 @@ module.exports = class DecoratorImporter {
 
     /**
      * Automatically import decorators referenced from this file, matching the provided definitions.
-     * Traverse each decorator via the Program node to ensure that this plugin runs in a deterministic order.
      */
-    traverseProgram(path) {
-        path.traverse({
-            'ClassExpression|ClassDeclaration|ClassProperty|Method': (path) => {
-                if (path.node.decorators) {
-                    path.node.decorators.forEach((decorator, index) => {
-                        this.visitDecorator(path.get('decorators.' + index), path);
-                    });
-                }
-            },
-        });
+    apply(path) {
+        if (path.node.decorators) {
+            path.node.decorators.forEach((decorator, index) => {
+                this.visitDecorator(path.get('decorators.' + index), path);
+            });
+        }
     }
 
     /** Sanity-check the syntax of decorator import definitions. */

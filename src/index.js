@@ -27,7 +27,17 @@ module.exports = () => {
         visitor: {
             Program(path, state) {
                 const options = state.opts = normalizeOptions(state.opts);
-                new DecoratorImportTransform(options.autoImport).traverseProgram(path);
+                const decoratorTransform = new DecoratorImportTransform(options.autoImport);
+
+                // Any plugins which need to run first-ish (before common transpilations) need to traverse the Program
+                // node here. Otherwise, other plugins that run in-between these might lose some of the source-code
+                // context that we need to apply our own transformations (e.g. arrow functions becoming normal functions
+                // without accompanying AST information, or decorators being transpiled out).
+                path.traverse({
+                    ['ClassExpression|ClassDeclaration|ClassProperty|Method'](path) {
+                        decoratorTransform.apply(path);
+                    },
+                });
             },
 
             JSXElement(path, state) {
