@@ -180,11 +180,17 @@ module.exports = class PathUtils {
      * Return the class declaration of a path's parent class, if it has a decorator with the given name.
      * This is often used to find a class with a specific decorator like @Component.
      * @param {Path} path
-     * @param {string} decoratorName
+     * @param {string|regexp} decoratorName
      * @return {Node<ClassDeclaration> | undefined}
      */
     static findParentClassWithDecorator(path, decoratorName) {
         const classDeclarationPath = path.findParent(parent => t.isClassDeclaration(parent));
+        const matchesDecoratorName = name => {
+            if (decoratorName instanceof RegExp) {
+                return name.match(decoratorName) !== null;
+            }
+            return name === decoratorName;
+        };
 
         // See if there's an @Component decorator:
         const decorators = classDeclarationPath && classDeclarationPath.node.decorators;
@@ -193,7 +199,7 @@ module.exports = class PathUtils {
             let decoratorPath = classDeclarationPath.get('decorators.' + index);
             let originalName = decoratorPath.getData('originalName');
             if (originalName) {
-                return originalName === decoratorName;
+                return matchesDecoratorName(originalName);
             }
 
             // If the name didn't change, we check the actual name of the decorator
@@ -202,7 +208,7 @@ module.exports = class PathUtils {
                 // It could be a call expression, like @Component({ fork: true })
                 expr = expr.callee;
             }
-            return expr && expr.name === decoratorName;
+            return expr && matchesDecoratorName(expr.name);
         });
         if (componentDecorator) {
             return classDeclarationPath;
