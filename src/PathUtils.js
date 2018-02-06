@@ -100,7 +100,7 @@ module.exports = class PathUtils {
 
     /**
      * Test whether "this" is defined for the given path - we walk up the parent functions, until we find a
-     * function that's not an arrow function (in which case this is defined), or we hit the program (in which
+     * class method (in which case this is defined), or we hit the program (in which
      * case it isn't).
      *
      * @param {Path} path
@@ -110,10 +110,13 @@ module.exports = class PathUtils {
         if (!path || path.isProgram()) {
             return false;
         }
-        if (path.isFunction() && !path.isArrowFunctionExpression()) {
+        if (path.isClassMethod()) {
             return true;
         }
-        return PathUtils.hasThisContext(path.getFunctionParent());
+        if (!path.isFunction() || path.isArrowFunctionExpression()) {
+            return PathUtils.hasThisContext(path.getFunctionParent());
+        }
+        return false;
     }
 
     /**
