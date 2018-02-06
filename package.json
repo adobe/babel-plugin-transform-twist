@@ -1,6 +1,6 @@
 {
   "name": "@twist/babel-plugin-transform",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "Adobe Systems Inc.",
   "description": "Transformations for Twist language features",
   "repository": "https://github.com/adobe/babel-plugin-transform-twist",
