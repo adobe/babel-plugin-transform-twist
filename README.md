@@ -1,6 +1,6 @@
 # babel-plugin-transform-twist
 
-[![Build Status](https://travis-ci.org/adobe/babel-plugin-transform-twist.svg?branch=master)](https://travis-ci.org/adobe/babel-plugin-transform-twist)
+[![Build Status](https://travis-ci.org/adobe/babel-plugin-transform-twist.svg?branch=master)](https://travis-ci.org/adobe/babel-plugin-transform-twist) [![Greenkeeper badge](https://badges.greenkeeper.io/adobe/babel-plugin-transform-twist.svg)](https://greenkeeper.io/)
 
 This babel plugin provides support for the syntax features of [twist](https://github.com/adobe/twist) that are common to any UI framework that you might use twist with. Specifically, it implements:
 
